@@ -5,7 +5,7 @@
 
 #define DHTPIN 11     // what pin we're connected to
 #define DHTTYPE DHT22 // DHT 22  (AM2302)
-String nodeid = "RED";
+String nodeid = "BACK_YARD";
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -33,7 +33,7 @@ void loop() {
     Serial.print(t);
     Serial.print("\r\n");
   }
-  delay(100); 
+  delay(3500); 
 }
 
 
