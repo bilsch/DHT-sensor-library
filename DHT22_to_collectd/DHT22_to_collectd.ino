@@ -1,13 +1,12 @@
-// Example testing sketch for various DHT humidity/temperature sensors
-// Written by ladyada, public domain
+#include <DHT.h>
 
-#include "DHT.h"
 
-#define DHTPIN 11     // what pin we're connected to
-#define DHTTYPE DHT22 // DHT 22  (AM2302)
-String nodeid = "BACK_YARD";
+#define DHTPIN 11
+#define DHTTYPE DHT22
+String nodeid = "GARAGE";
 
 DHT dht(DHTPIN, DHTTYPE);
+int errors=0;
 
 void setup() {
   Serial.begin(115200); 
@@ -19,22 +18,22 @@ void loop() {
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
   float t = dht.readTemperature();
-  int foo;
 
   // check if returns are valid, if they are NaN (not a number) then something went wrong!
   if (isnan(t) || isnan(h)) {
-    // Serial.println("Failed to read from DHT");
-  } 
-  else {
+//    Serial.println("Failed to read from DHT");
+    errors = 1;
+  } else {
+    // We want json output, easier to parse later
+//    { "sensor_name": "foo", "temp_c": 50, "temp_f": 80 }
+    float temp_f = t * 1.8 + 32;
+    Serial.print(" \{ \"sensor_name\": \"");
     Serial.print(nodeid);
-    Serial.print(" ");
+    Serial.print("\", \"humidity\": ");
     Serial.print(h);
-    Serial.print(" ");
+    Serial.print(", \"celsius\":");
     Serial.print(t);
-    Serial.print("\r\n");
+    Serial.println("}");
   }
-  delay(3500); 
+  delay(5000);
 }
-
-
-
